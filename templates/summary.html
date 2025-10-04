@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h3 style="margin-top:0;">Summary</h3>
+
+  <form method="GET" action="{{ url_for('summary_page') }}" style="margin-bottom:12px;">
+    <label>Filter by month (YYYY-MM): 
+      <input type="text" name="month" placeholder="2025-10" value="{{ month or '' }}" />
+    </label>
+    <button class="btn primary" type="submit">Apply</button>
+    {% if month %}
+      <a class="btn" href="{{ url_for('summary_page') }}">Clear</a>
+    {% endif %}
+  </form>
+<!-- ✅ Budget alert card -->
+  {% if budget_limit is not none %}
+    <div class="card" style="background: {% if over_budget %}#fee2e2{% else %}#dcfce7{% endif %};">
+      <strong>Budget Limit:</strong>
+      {% if budget_limit > 0 %}
+        {{ "%.2f"|format(budget_limit) }}
+      {% else %}
+        Not set
+      {% endif %}
+      |
+      <strong>Spent:</strong> {{ "%.2f"|format(spent) }}
+      {% if budget_limit > 0 %}
+        {% if over_budget %}
+          <div style="color:#b91c1c; font-weight:600;">⚠ Over budget!</div>
+        {% else %}
+          <div style="color:#166534; font-weight:600;">✅ Within budget</div>
+        {% endif %}
+      {% else %}
+        <div style="color:#334155;">Tip: set BUDGET_LIMIT in .env to enable alerts.</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div class="card" style="margin:0;">
+      <h4 style="margin-top:0;">Monthly Total</h4>
+      <table>
+        <thead>
+          <tr><th>Year-Month</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+          {% if ms is not none and not ms.empty %}
+            {% for _, row in ms.iterrows() %}
+              <tr>
+                <td>{{ row["year_month"] }}</td>
+                <td>{{ "%.2f"|format(row["amount"]) }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="2">No data yet.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin:0;">
+      <h4 style="margin-top:0;">Category Total{% if month %} ({{ month }}){% endif %}</h4>
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+          {% if cs is not none and not cs.empty %}
+            {% for _, row in cs.iterrows() %}
+              <tr>
+                <td>{{ row["category"] }}</td>
+                <td>{{ "%.2f"|format(row["amount"]) }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="2">No data for this month.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h4 style="margin-top:0;">Charts</h4>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start;">
+    <div>
+      <div style="font-weight:600; margin-bottom:8px;">Monthly Trend</div>
+      {% if trend_path %}
+        <img alt="Monthly Trend" style="max-width:100%; border-radius:8px;"
+             src="{{ '/' + trend_path }}?v={{ cache_bust }}">
+      {% else %}
+        <div>No chart yet (no data).</div>
+      {% endif %}
+    </div>
+    <div>
+      <div style="font-weight:600; margin-bottom:8px;">Category Share{% if month %} ({{ month }}){% endif %}</div>
+      {% if pie_path %}
+        <img alt="Category Share" style="max-width:100%; border-radius:8px;"
+             src="{{ '/' + pie_path }}?v={{ cache_bust }}">
+      {% else %}
+        <div>No chart yet (no data).</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

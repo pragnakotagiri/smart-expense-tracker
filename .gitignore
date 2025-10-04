@@ -6,7 +6,9 @@ __pycache__/
 
 # local data & outputs
 data/*.db
-reports/*.png
+
 
 # env/config
 .env
+
+data/*.csv

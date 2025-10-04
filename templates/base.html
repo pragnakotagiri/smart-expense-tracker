@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Smart Expense Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- simple mobile-friendly styling -->
+  <style>
+    body{font-family:system-ui,Segoe UI,Arial,sans-serif; margin:0; background:#f7f7f8;}
+    header{background:#0ea5e9;color:#fff;padding:12px 16px;font-weight:600;}
+    main{max-width:900px;margin:20px auto;padding:0 16px;}
+    .nav a{margin-right:12px;color:#0ea5e9;text-decoration:none;}
+    .card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:16px;margin-bottom:16px;}
+    table{width:100%;border-collapse:collapse;}
+    th,td{padding:8px 10px;border-bottom:1px solid #eee;text-align:left;}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;border:1px solid #0ea5e9;color:#0ea5e9;text-decoration:none;}
+    .btn.primary{background:#0ea5e9;color:#fff;border:none;}
+    .flash{background:#ecfeff;color:#0c4a6e;padding:10px 12px;border-radius:8px;margin-bottom:12px;}
+  </style>
+</head>
+<body>
+  <header>Smart Expense Tracker (Web)</header>
+  <main>
+    <div class="nav" style="margin:10px 0 16px;">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('add_page') }}">Add Expense</a>
+      <a href="{{ url_for('summary_page') }}">Summary</a>
+      <a href="{{ url_for('import_page') }}">Import CSV</a>
+      <a href="{{ url_for('export_page') }}">Export CSV</a>
+
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div class="flash">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

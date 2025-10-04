@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h3 style="margin-top:0;">Recent Expenses</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Method</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r[0] }}</td>
+        <td>{{ r[1] }}</td>
+        <td>{{ r[2] }}</td>
+        <td>{{ r[3] }}</td>
+        <td>{{ "%.2f"|format(r[4]) }}</td>
+        <td>{{ r[5] }}</td>
+        <td>
+          <form action="{{ url_for('delete_page', expense_id=r[0]) }}" method="POST" style="display:inline;"
+                onsubmit="return confirm('Delete expense #{{ r[0] }}?');">
+            <button class="btn" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">No expenses yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
