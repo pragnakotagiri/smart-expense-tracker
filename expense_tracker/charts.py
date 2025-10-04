@@ -1,4 +1,7 @@
 import os
+# ✅ Use a non-GUI backend for server environments (fixes warnings with Flask)
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from .analytics import monthly_summary, category_summary
 
