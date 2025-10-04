@@ -58,6 +58,24 @@ python main.py importcsv data\\sample\_expenses.csv
 
 
 
+
+
+\## Screenshots
+
+
+
+Monthly trend and category share (generated via `python main.py charts`):
+
+
+
+!\[Monthly Trend](reports/monthly\_trend.png)
+
+!\[Category Share](reports/category\_share.png)
+
+
+
+
+
 \# test
 
 pytest -q
