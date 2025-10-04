@@ -21,5 +21,7 @@ def list_expenses(limit=50):
 
 def delete_expense(expense_id: int):
     with get_conn() as c:
-        c.execute("DELETE FROM expenses WHERE id=?", (expense_id,))
-        return c.rowcount
+        cur = c.execute("DELETE FROM expenses WHERE id=?", (expense_id,))
+        # commit is handled by the context manager, but this is harmless:
+        # c.commit()
+        return cur.rowcount  # number of rows deleted (0 if not found)
