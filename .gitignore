@@ -1,0 +1,12 @@
+# venv & caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# local data & outputs
+data/*.db
+reports/*.png
+
+# env/config
+.env
